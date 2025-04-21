@@ -574,8 +574,16 @@ window.handleProductSubmit = async function(e) {
   const description = formData.get('description');
   const category = formData.get('category');
   const price = formData.get('price');
-  const imageUrl = formData.get('imageUrl');
-  const cloudinaryId = formData.get('cloudinaryId');
+  const imageUrl = document.getElementById('product-image-url').value;
+  const cloudinaryId = document.getElementById('product-cloudinary-id').value;
+  
+  console.log("Form validation values:");
+  console.log("- Title:", title);
+  console.log("- Description:", description);
+  console.log("- Category:", category);
+  console.log("- Price:", price);
+  console.log("- Image URL:", imageUrl);
+  console.log("- Cloudinary ID:", cloudinaryId);
   
   if (!title || !description || !category || !price) {
     alert('Please fill in all required fields');
@@ -616,10 +624,10 @@ window.handleProductSubmit = async function(e) {
       };
       
       console.log("Product data being sent:", productData);
-      console.log("API URL being used:", API_URL);
+      console.log("API URL being used:", `${API_URL}/direct-upload`);
       
-      // Simplified API call
-      response = await fetch(API_URL, {
+      // Use the direct-upload endpoint for Cloudinary uploads
+      response = await fetch(`${API_URL}/direct-upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -642,10 +650,10 @@ window.handleProductSubmit = async function(e) {
       };
       
       console.log("Edit data being sent:", productData);
-      console.log("API URL being used for edit:", `${API_URL}/${productId}`);
+      console.log("API URL being used for edit:", `${API_URL}/direct-upload/${productId}`);
       
-      // Simplified API call for edit
-      response = await fetch(`${API_URL}/${productId}`, {
+      // Use the direct-upload endpoint for edit as well
+      response = await fetch(`${API_URL}/direct-upload/${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -1112,4 +1120,25 @@ async function loadAllProductsAdmin() {
     console.error('Error loading products for admin panel:', error);
     contentDiv.innerHTML = `<p style="color: red;">Error loading products: ${error.message}</p>`;
   }
-} 
+}
+
+// Add function to check image upload status
+window.checkImageUpload = function() {
+  const imageUrl = document.getElementById('product-image-url').value;
+  const cloudinaryId = document.getElementById('product-cloudinary-id').value;
+  const previewImage = document.getElementById('preview-image');
+  const previewContainer = document.getElementById('uploaded-image-preview');
+  
+  console.log("=== IMAGE UPLOAD DEBUG INFO ===");
+  console.log("Image URL field value:", imageUrl);
+  console.log("Cloudinary ID field value:", cloudinaryId);
+  console.log("Preview image displayed:", previewContainer.style.display !== 'none');
+  console.log("Preview image src:", previewImage.src);
+  console.log("Last uploaded image (from window):", window.lastUploadedImage);
+  
+  if (!imageUrl) {
+    alert("No image has been uploaded yet. Please click 'Upload Image' first.");
+  } else {
+    alert(`Image uploaded successfully!\nURL: ${imageUrl}\nID: ${cloudinaryId}`);
+  }
+}; 
