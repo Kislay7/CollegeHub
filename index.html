@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CollegeHub - Student Companion Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Poppins:wght@300;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="hide">
+        <nav>
+            <img src="images/Slay.png" alt="CollegeHub" class="logo">
+            <ul>
+                <li id="login-btn">
+                    <a href="#">Login</a>
+                </li>
+                <li id="signup-btn">
+                    <a href="#">Sign up</a>
+                </li>
+                <li id="add-product-btn" style="display: none;">
+                    <a href="javascript:void(0);" onclick="showAddProductModalDirect(); return false;">Add Product</a>
+                </li>
+                <li id="my-products-btn" style="display: none;">
+                    <a href="javascript:void(0);" onclick="showMyProductsDirect(); return false;">My Products</a>
+                </li>
+                <!-- <li class="search-icon">
+                    <a href="#">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
+                </li>
+                <li class="hamburger">
+                    <a href="#">
+                        <div class="bar"></div>
+                    </a>
+                </li> -->
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Parallax Main Section -->
+    <main>
+        <div class="vignette hide"></div>
+        <img src="images/bg.png" data-speedx="0.3" data-speedy="0.38" class="parallax bg" data-animated="false">
+        <img src="images/Buildings.png" data-speedx="0.25" data-speedy="0.02" class="parallax Buildings" data-animated="false">
+        <img src="images/cloud.png" data-speedx="0.35" data-speedy="0.10" class="parallax cloud" data-animated="false">
+        <img src="images/Sun.png" data-speedx="0.20" data-speedy="0.12" class="parallax Sun" data-animated="false">
+        <img src="images/Back tree.png" data-speedx="0.20" data-speedy="0.06" class="parallax Backtree" data-animated="false">
+        <img src="images/Front tree.png" data-speedx="0.15" data-speedy="0.03" class="parallax Fronttree" data-animated="false">
+        <img src="images/University web.png" data-speedx="0.02" data-speedy="0.001" class="parallax University" data-animated="false">
+        
+        <div class="text parallax">
+            <h2>CollegeHub</h2>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search for hostels, food, essentials...">
+            <button class="search-button">Search</button>
+        </div>
+        
+        <img src="images/Students web.png" data-speedx="0.005" data-speedy="0.001" class="parallax Students" data-animated="false">
+    </main>
+
+    <!-- Login/Signup Modals -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" name="email" placeholder="College Email" required>
+                <input type="password" id="login-password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <input type="text" id="signup-name" name="name" placeholder="Full Name" required>
+                <input type="email" id="signup-email" name="email" placeholder="College Email" required>
+                <input type="password" id="signup-password" name="password" placeholder="Create Password" required>
+                <input type="text" id="signup-college" name="college" placeholder="College Name" required>
+                <input type="text" id="signup-course" name="course" placeholder="Course" required>
+                <button type="submit">Create Account</button>
+                <p class="form-footer">Already have an account? <a href="#" id="show-login">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Add New Product</h2>
+        <form id="product-form" data-mode="add" onsubmit="return false;">
+          <div class="form-group">
+            <label for="product-title">Title</label>
+            <input type="text" id="product-title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="product-description">Description</label>
+            <textarea id="product-description" name="description" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="product-category">Category</label>
+            <select id="product-category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="hostel">Hostel Items</option>
+              <option value="flatmate">Flatmates</option>
+              <option value="food">Food Services</option>
+              <option value="essentials">College Essentials</option>
+              <option value="places">Nearby Places</option>
+              <option value="notes">College Notice</option>
+              <!-- <option value="books">Books</option>
+              <option value="electronics">Electronics</option>
+              <option value="clothing">Clothing</option>
+              <option value="furniture">Furniture</option>
+              <option value="other">Other</option> -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-price">Price (Rs)</label>
+            <input type="text" id="product-price" name="price" required>
+          </div>
+          <div class="form-group">
+            <label for="product-image">Image</label>
+            <div class="cloudinary-upload-container">
+              <input type="hidden" id="product-image-url" name="imageUrl">
+              <input type="hidden" id="product-cloudinary-id" name="cloudinaryId">
+              <button type="button" id="upload-widget-opener" class="cloudinary-button">Upload Image</button>
+              <div id="uploaded-image-preview" style="margin-top: 10px; display: none;">
+                <img id="preview-image" src="" alt="Preview" style="max-width: 100%; max-height: 200px;">
+                <p id="upload-status" style="margin-top: 5px;">Image uploaded successfully</p>
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="if(window.handleProductSubmit) { window.handleProductSubmit(event); } else { alert('handleProductSubmit function not defined!'); console.error('handleProductSubmit not found in window object'); }">Save Product</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="product-detail-modal">
+        <div class="modal-content">
+            <!-- Content will be dynamically populated -->
+        </div>
+    </div>
+
+    <!-- Main Content Sections -->
+    <section class="categories">
+        <h2>Find What You Need</h2>
+        <div class="category-grid">
+            <div class="category-card" data-category="hostel">
+                <i class="fas fa-bed"></i>
+                <h3>Hostel Items</h3>
+            </div>
+            <div class="category-card" data-category="flatmate">
+                <i class="fas fa-users"></i>
+                <h3>Flatmates</h3>
+            </div>
+            <div class="category-card" data-category="food">
+                <i class="fas fa-utensils"></i>
+                <h3>Food Services</h3>
+            </div>
+            <div class="category-card" data-category="essentials">
+                <i class="fas fa-book"></i>
+                <h3>College Essentials</h3>
+            </div>
+            <div class="category-card" data-category="places">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Nearby Places</h3>
+            </div>
+            <div class="category-card" data-category="notes">
+                <i class="fas fa-calendar-alt"></i>
+                <h3>College Notice</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="listings">
+        <h2>Recent Listings</h2>
+        <div class="listings-grid" id="listings-container">
+            <!-- Listings will be loaded here dynamically -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About CollegeHub</h3>
+                <p>Your one-stop solution for all college living needs - hostels, food, essentials and more.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Listings</a></li>
+                    <li><a href="#">How it works</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@collegehub.com</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 CollegeHub. All rights reserved.</p>
+            <p class="server-notice">This application uses MongoDB for data storage and Cloudinary for image hosting.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <!-- Cloudinary Upload Widget -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <!-- Add Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <!-- Add Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Initialize Firebase -->
+    <script src="firebase-config.js"></script>
+    <!-- Cloudinary configuration -->
+    <script src="cloudinary-config.js"></script>
+    <!-- Include products.js first to ensure handleProductSubmit is defined -->
+    <script src="products.js"></script>
+    <script src="app.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Additional debug functionality
+        let useMockMode = false;
+        
+        function toggleServer() {
+            useMockMode = !useMockMode;
+            localStorage.setItem('useMockMode', useMockMode);
+            alert(`${useMockMode ? 'Using mock mode' : 'Using server mode'} now`);
+        }
+        
+        function forceFetchProducts() {
+            if (typeof fetchProducts === 'function') {
+                fetchProducts();
+                alert('Forced refresh of products');
+            } else {
+                alert('fetchProducts function not found');
+            }
+        }
+        
+        // Direct function to show Add Product Modal
+        function showAddProductModalDirect(e) {
+            if (e) e.preventDefault();
+            console.log('Direct Add Product button click');
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                alert('Please log in to add a product');
+                return;
+            }
+            
+            const productModal = document.getElementById('product-modal');
+            const productForm = document.getElementById('product-form');
+            
+            if (!productModal || !productForm) {
+                console.error('Product modal or form not found');
+                alert('Error: Could not open the product form. Please refresh the page and try again.');
+                return;
+            }
+            
+            // Reset form
+            productForm.reset();
+            
+            // Set form mode to add
+            productForm.dataset.mode = 'add';
+            productForm.dataset.id = '';
+            
+            // Update modal title
+            const modalTitle = document.querySelector('#product-modal h2');
+            if (modalTitle) modalTitle.textContent = 'Add New Product';
+            
+            // Show modal
+            productModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Return false to prevent URL change
+            return false;
+        }
+        
+        // Direct function to show My Products
+        function showMyProductsDirect(e) {
+            if (e) e.preventDefault();
+            console.log('Direct My Products button click');
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                alert('Please log in to view your products');
+                return;
+            }
+            
+            try {
+                const API_URL = 'http://localhost:3000/api/products';
+                const listingsContainer = document.getElementById('listings-container');
+                
+                // Show loader
+                if (listingsContainer) {
+                    listingsContainer.innerHTML = '<div class="loader"></div>';
+                }
+                
+                // Check if we're in mock mode
+                const useMockMode = localStorage.getItem('useMockMode') === 'true';
+                
+                if (useMockMode) {
+                    console.log('Using mock data for My Products (direct)');
+                    const mockProducts = JSON.parse(localStorage.getItem('mockProducts') || '[]');
+                    const userProducts = mockProducts.filter(p => p.user && p.user.uid === user.uid);
+                    
+                    // Remove loader
+                    const loader = document.querySelector('.loader');
+                    if (loader) {
+                        loader.remove();
+                    }
+                    
+                    if (listingsContainer) {
+                        listingsContainer.innerHTML = '';
+                        
+                        if (userProducts.length === 0) {
+                            listingsContainer.innerHTML = '<p class="no-results">You have not added any products yet.</p>';
+                        } else {
+                            // Display products using the existing function if available
+                            if (typeof displayProducts === 'function') {
+                                displayProducts(userProducts);
+                            } else {
+                                // Fallback display logic
+                                userProducts.forEach(product => {
+                                    const productCard = document.createElement('div');
+                                    productCard.className = 'listing-card';
+                                    productCard.dataset.id = product._id || 'unknown';
+                                    productCard.innerHTML = `
+                                        <img src="${product.image}" alt="${product.title}" class="listing-image">
+                                        <div class="listing-details">
+                                            <span class="listing-category">${product.category}</span>
+                                            <h3 class="listing-title">${product.title}</h3>
+                                            <p class="listing-description">${product.description.substring(0, 100)}${product.description.length > 100 ? '...' : ''}</p>
+                                            <p class="listing-price">${product.price}</p>
+                                            <p class="listing-seller">Posted by: ${product.user.name}</p>
+                                        </div>
+                                    `;
+                                    listingsContainer.appendChild(productCard);
+                                });
+                            }
+                        }
+                    }
+                    
+                    // Scroll to listings section
+                    document.querySelector('.listings').scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                
+                // Fetch user's products from server
+                fetch(`${API_URL}/user/${user.uid}`)
+                    .then(response => response.json())
+                    .then(products => {
+                        // Remove loader
+                        const loader = document.querySelector('.loader');
+                        if (loader) {
+                            loader.remove();
+                        }
+                        
+                        // Display products using the existing function if available
+                        if (typeof displayProducts === 'function') {
+                            displayProducts(products);
+                        } else {
+                            // Fallback display logic
+                            if (listingsContainer) {
+                                listingsContainer.innerHTML = '';
+                                
+                                if (products.length === 0) {
+                                    listingsContainer.innerHTML = '<p class="no-results">You have not added any products yet.</p>';
+                                    return;
+                                }
+                                
+                                products.forEach(product => {
+                                    const productCard = document.createElement('div');
+                                    productCard.className = 'listing-card';
+                                    productCard.dataset.id = product._id;
+                                    productCard.innerHTML = `
+                                        <img src="${product.image}" alt="${product.title}" class="listing-image">
+                                        <div class="listing-details">
+                                            <span class="listing-category">${product.category}</span>
+                                            <h3 class="listing-title">${product.title}</h3>
+                                            <p class="listing-description">${product.description.substring(0, 100)}${product.description.length > 100 ? '...' : ''}</p>
+                                            <p class="listing-price">${product.price}</p>
+                                            <p class="listing-seller">Posted by: ${product.user.name}</p>
+                                        </div>
+                                    `;
+                                    listingsContainer.appendChild(productCard);
+                                });
+                            }
+                        }
+                        
+                        // Scroll to listings section
+                        document.querySelector('.listings').scrollIntoView({ behavior: 'smooth' });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user products:', error);
+                        if (listingsContainer) {
+                            listingsContainer.innerHTML = `<p class="error-message">Failed to load your products. Please try again later.</p>`;
+                        }
+                        
+                        // Ask user if they want to switch to mock mode
+                        if (!useMockMode && confirm('Server appears to be offline. Would you like to switch to mock mode for testing?')) {
+                            localStorage.setItem('useMockMode', 'true');
+                            showMyProductsDirect(); // Try again in mock mode
+                        }
+                    });
+            } catch (error) {
+                console.error('Error in showMyProductsDirect:', error);
+                alert('An error occurred while trying to show your products.');
+            }
+            
+            // Return false to prevent URL change
+            return false;
+        }
+    </script>
+</body>
+</html>
