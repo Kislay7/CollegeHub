@@ -12,7 +12,7 @@ function getApiUrl() {
   
   if (isProduction) {
     // Replace with your actual backend service URL when deployed
-    return 'https://collegehub-backend.onrender.com/api/products';
+    return 'https://collegehub-backend.onrender.com';
   } else {
     // Local development
     return 'http://localhost:3000/api/products';
