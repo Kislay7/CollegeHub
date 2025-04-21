@@ -4,6 +4,17 @@ const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
 
+
+app.use(cors({
+  origin: [
+    'http://localhost:3000', 
+    'https://kislay7.github.io/CollegeHub/', 
+    'https://collegehub-backend.onrender.com'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 // Load environment variables from .env file
 dotenv.config();
 
