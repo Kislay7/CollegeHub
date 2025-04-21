@@ -1,6 +1,24 @@
 // Product management functionality
 console.log("products.js loaded, defining handleProductSubmit...");
-const API_URL = 'http://localhost:3000/api/products';
+
+// API URL Configuration
+// In production, this will be replaced with your actual backend URL
+const API_URL = getApiUrl();
+
+// Function to determine the API URL based on environment
+function getApiUrl() {
+  // Check if we're in production (GitHub Pages)
+  const isProduction = window.location.hostname.includes('github.io');
+  
+  if (isProduction) {
+    // Replace with your actual backend service URL when deployed
+    return 'https://collegehub-backend.onrender.com/api/products';
+  } else {
+    // Local development
+    return 'http://localhost:3000/api/products';
+  }
+}
+
 let listingsContainer; // Will be initialized on DOM load
 let searchInput; // Will be initialized on DOM load
 let searchButton; // Will be initialized on DOM load
