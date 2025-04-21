@@ -4,19 +4,12 @@ console.log("products.js loaded, defining handleProductSubmit...");
 // API URL Configuration
 // In production, this will be replaced with your actual backend URL
 const API_URL = getApiUrl();
+console.log("API URL configured as:", API_URL);
 
 // Function to determine the API URL based on environment
 function getApiUrl() {
-  // Check if we're in production (GitHub Pages)
-  const isProduction = window.location.hostname.includes('github.io');
-  
-  if (isProduction) {
-    // Replace with your actual backend service URL when deployed
-    return 'https://collegehub-backend.onrender.com/api/products';
-  } else {
-    // Local development
-    return 'http://localhost:3000/api/products';
-  }
+  // For testing purposes, use the correct Render URL structure
+  return 'https://collegehub-backend.onrender.com/api/products';
 }
 
 let listingsContainer; // Will be initialized on DOM load
@@ -301,12 +294,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // Functions
 async function fetchProducts() {
   console.log('fetchProducts called');
+  console.log('Using API URL:', API_URL);
   
   try {
     showLoader();
     
-    // Fetch products from the MongoDB API
+    // Fetch products from the MongoDB API - simplified request
     const response = await fetch(API_URL);
+    
+    console.log('Fetch response status:', response.status);
     
     if (!response.ok) {
       throw new Error(`Server returned ${response.status}: ${response.statusText}`);
@@ -619,7 +615,11 @@ window.handleProductSubmit = async function(e) {
         userId: formData.get('userId')
       };
       
-      response = await fetch(`${API_URL}/direct-upload`, {
+      console.log("Product data being sent:", productData);
+      console.log("API URL being used:", API_URL);
+      
+      // Simplified API call
+      response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -641,7 +641,11 @@ window.handleProductSubmit = async function(e) {
         userId: formData.get('userId')
       };
       
-      response = await fetch(`${API_URL}/direct-upload/${productId}`, {
+      console.log("Edit data being sent:", productData);
+      console.log("API URL being used for edit:", `${API_URL}/${productId}`);
+      
+      // Simplified API call for edit
+      response = await fetch(`${API_URL}/${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
