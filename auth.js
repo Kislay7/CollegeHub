@@ -130,6 +130,10 @@ function handleSuccessfulAuth(user) {
     if (addProductBtn) addProductBtn.style.display = 'block';
     if (myProductsBtn) myProductsBtn.style.display = 'block';
     
+    // Hide login message
+    const loginMessage = document.getElementById('login-message');
+    if (loginMessage) loginMessage.style.display = 'none';
+    
     // Add logout option if it doesn't exist
     if (!document.getElementById('logout-btn')) {
         const logoutOption = document.createElement('li');
@@ -154,6 +158,10 @@ async function logoutUser() {
         // Reset UI
         loginBtn.innerHTML = '<a href="#">Login</a>';
         signupBtn.style.display = 'block';
+        
+        // Show login message
+        const loginMessage = document.getElementById('login-message');
+        if (loginMessage) loginMessage.style.display = 'block';
         
         // Hide product management buttons
         const addProductBtn = document.getElementById('add-product-btn');
@@ -187,3 +195,17 @@ let currentUser = null;
 // 2. Implement proper password hashing
 // 3. Use JWT or session tokens for authentication
 // 4. Have a backend API to handle user registration and login
+
+// Add authentication state observer to handle the login message on page load
+firebase.auth().onAuthStateChanged(function(user) {
+    const loginMessage = document.getElementById('login-message');
+    if (loginMessage) {
+        if (user) {
+            // User is signed in, hide the message
+            loginMessage.style.display = 'none';
+        } else {
+            // No user is signed in, show the message
+            loginMessage.style.display = 'block';
+        }
+    }
+});
