@@ -726,74 +726,104 @@ async function showMyProducts(e) {
 }
 
 function showProductDetails(product) {
-  if (!productDetailModal) return;
-  
-  // Populate modal with product details
-  const modalContent = productDetailModal.querySelector('.modal-content');
-  modalContent.innerHTML = `
-    <span class="close-btn">&times;</span>
-    <div class="product-detail-container">
-      <div class="product-detail-image">
-        <img src="${product.image}" alt="${product.title}">
-      </div>
-      <div class="product-detail-info">
-        <span class="product-category">${getCategoryDisplayName(product.category)}</span>
-        <h2>${product.title}</h2>
-        <p class="product-description">${product.description}</p>
-        <p class="product-price">${product.price}</p>
-        <p class="product-seller">Posted by: ${product.user.name}</p>
-        <p class="product-date">Added on: ${new Date(product.createdAt).toLocaleDateString()}</p>
-        <div class="product-contact">
-          <a href="mailto:${product.user.email}" class="contact-button">Contact Seller</a>
+    console.log('Showing product details for:', product.title);
+    
+    // Set up the product detail content
+    const detailModal = document.getElementById('product-detail-modal');
+    const modalContent = detailModal.querySelector('.modal-content');
+    
+    // Format price for display
+    const formattedPrice = product.price.startsWith('₹') ? product.price : '₹' + product.price;
+    
+    // Create the modal content
+    modalContent.innerHTML = `
+        <span class="close-btn">&times;</span>
+        <div class="product-detail-container">
+            <div class="product-detail-image">
+                <img src="${product.image}" alt="${product.title}" id="product-detail-img">
+            </div>
+            <div class="product-detail-info">
+                <span class="product-category">${getCategoryDisplayName(product.category)}</span>
+                <h2>${product.title}</h2>
+                <p class="product-description">${product.description}</p>
+                <p class="product-price">${formattedPrice}</p>
+                <p class="product-seller">Posted by: ${product.user.name}</p>
+                <p class="product-date">Posted on: ${new Date(product.createdAt).toLocaleDateString()}</p>
+                <div class="product-contact">
+                    <a href="mailto:${product.user.email}" class="contact-button">Contact Seller</a>
+                </div>
+                <div class="product-actions" style="display: none;">
+                    <button class="edit-product-btn">Edit</button>
+                    <button class="delete-product-btn">Delete</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  `;
-  
-  // Add edit/delete buttons if current user is the owner or an admin
-  const user = firebase.auth().currentUser;
-  if (user && (user.uid === product.user.uid || isAdmin())) {
-    const actionButtons = document.createElement('div');
-    actionButtons.className = 'product-actions';
+    `;
     
-    // Only show Edit button for the product owner
-    if (user.uid === product.user.uid) {
-      actionButtons.innerHTML = `
-        <button class="edit-product-btn">Edit</button>
-        <button class="delete-product-btn">Delete</button>
-      `;
-    } else if (isAdmin()) {
-      // For admins, only show Delete button with admin indicator
-      actionButtons.innerHTML = `
-        <button class="delete-product-btn admin-delete">Delete (Admin)</button>
-      `;
+    // Show the modal
+    detailModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Add event listener for closing the modal
+    const closeBtn = modalContent.querySelector('.close-btn');
+    closeBtn.addEventListener('click', closeProductDetailModal);
+    
+    // Handle full-size image view
+    const productImg = document.getElementById('product-detail-img');
+    const fullsizeModal = document.getElementById('image-fullsize-modal');
+    const fullsizeImg = document.getElementById('fullsize-image');
+    const closeFullsize = document.querySelector('.close-fullsize');
+    
+    if (productImg && fullsizeModal && fullsizeImg) {
+        productImg.addEventListener('click', function() {
+            fullsizeImg.src = product.image;
+            fullsizeModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeFullsize.addEventListener('click', function() {
+            fullsizeModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close fullsize modal when clicking outside the image
+        fullsizeModal.addEventListener('click', function(e) {
+            if (e.target === fullsizeModal) {
+                fullsizeModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
     }
     
-    modalContent.querySelector('.product-detail-info').appendChild(actionButtons);
-    
-    // Add event listeners
-    const editBtn = modalContent.querySelector('.edit-product-btn');
-    if (editBtn) {
-      editBtn.addEventListener('click', () => {
-        editProduct(product);
-        closeProductDetailModal();
-      });
-    }
-    
-    modalContent.querySelector('.delete-product-btn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to delete this product?')) {
-        deleteProduct(product._id);
-        closeProductDetailModal();
-      }
-    });
-  }
-  
-  // Close button functionality
-  modalContent.querySelector('.close-btn').addEventListener('click', closeProductDetailModal);
-  
-  // Show modal
-  productDetailModal.style.display = 'block';
-  document.body.style.overflow = 'hidden';
+    // Check if the current user is the owner of the product or an admin
+    checkProductOwnershipOrAdmin(product._id)
+        .then(canModify => {
+            if (canModify) {
+                const actionsDiv = modalContent.querySelector('.product-actions');
+                if (actionsDiv) {
+                    actionsDiv.style.display = 'flex';
+                    
+                    // Add event listeners for edit and delete buttons
+                    const editBtn = actionsDiv.querySelector('.edit-product-btn');
+                    const deleteBtn = actionsDiv.querySelector('.delete-product-btn');
+                    
+                    editBtn.addEventListener('click', () => {
+                        closeProductDetailModal();
+                        editProduct(product);
+                    });
+                    
+                    deleteBtn.addEventListener('click', () => {
+                        if (confirm(`Are you sure you want to delete "${product.title}"?`)) {
+                            deleteProduct(product._id);
+                            closeProductDetailModal();
+                        }
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error checking product ownership:', error);
+        });
 }
 
 function closeProductDetailModal() {
