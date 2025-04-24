@@ -13,6 +13,7 @@
     <header class="hide">
         <nav>
             <img src="images/Slay.png" alt="CollegeHub" class="logo">
+            <div id="login-message" class="blink-message">Sign up or Login to post your products and services!</div>
             <ul>
                 <li id="login-btn">
                     <a href="#">Login</a>
@@ -138,6 +139,8 @@
                 <img id="preview-image" src="" alt="Preview" style="max-width: 100%; max-height: 200px;">
                 <p id="upload-status" style="margin-top: 5px;">Image uploaded successfully</p>
               </div>
+              <!-- Debug button -->
+              <!-- <button type="button" onclick="checkImageUpload()" style="margin-top: 10px; background-color: #333; color: white; padding: 5px 10px;">Check Image Upload Status</button> -->
             </div>
           </div>
           <button type="button" onclick="if(window.handleProductSubmit) { window.handleProductSubmit(event); } else { alert('handleProductSubmit function not defined!'); console.error('handleProductSubmit not found in window object'); }">Save Product</button>
@@ -150,6 +153,12 @@
         <div class="modal-content">
             <!-- Content will be dynamically populated -->
         </div>
+    </div>
+
+    <!-- Full-size Image Modal -->
+    <div id="image-fullsize-modal">
+        <span class="close-fullsize">&times;</span>
+        <img id="fullsize-image" src="">
     </div>
 
     <!-- Main Content Sections -->
@@ -200,9 +209,9 @@
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">Listings</a></li>
-                    <li><a href="#">How it works</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <!-- <li><a href="#">Listings</a></li> -->
+                    <!-- <li><a href="#">How it works</a></li>
+                    <li><a href="#">Contact</a></li> -->
                 </ul>
             </div>
             <div class="footer-section">
@@ -217,7 +226,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 CollegeHub. All rights reserved.</p>
-            <p class="server-notice">This application uses MongoDB for data storage and Cloudinary for image hosting.</p>
+            <!-- <p class="server-notice">This application uses MongoDB for data storage and Cloudinary for image hosting.</p> -->
         </div>
     </footer>
 
