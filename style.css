@@ -104,6 +104,46 @@ header ul a {
     top: 4.5px;
 }
 
+/* Blinking Message Styles */
+.blink-message {
+    color: #FF0026;
+    font-weight: 600;
+    text-align: center;
+    animation: blink-animation 1.5s infinite;
+    margin-left: auto;
+    margin-right: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@keyframes blink-animation {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Responsive styles for the blinking message */
+@media (max-width: 992px) {
+    .blink-message {
+        font-size: 0.8rem;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .blink-message {
+        font-size: 0.7rem;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .blink-message {
+        display: none;
+    }
+}
+
 /* Parallax Section */
 main {
     position: relative;
@@ -367,35 +407,46 @@ main {
 
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .category-card {
     background: white;
-    border-radius: 10px;
-    padding: 30px 20px;
+    border-radius: 8px;
+    padding: 20px 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
     cursor: pointer;
 }
 
 .category-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    background-color: #FF0026;
 }
 
 .category-card i {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #FF0026;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
 }
 
 .category-card h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #333;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover i {
+    color: white;
+}
+
+.category-card:hover h3 {
+    color: white;
 }
 
 /* Listings Section */
@@ -413,8 +464,8 @@ main {
 
 .listings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -424,51 +475,77 @@ main {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
     text-align: left;
+    cursor: pointer;
 }
 
 .listing-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    background-color: #FF0026;
+}
+
+.listing-card:hover .listing-title,
+.listing-card:hover .listing-description,
+.listing-card:hover .listing-seller {
+    color: white;
+}
+
+.listing-card:hover .listing-category {
+    background-color: white;
+    color: #FF0026;
 }
 
 .listing-image {
     width: 100%;
-    height: 200px;
+    height: 180px;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.listing-card:hover .listing-image {
+    transform: scale(1.05);
 }
 
 .listing-details {
-    padding: 20px;
+    padding: 15px;
 }
 
 .listing-category {
     display: inline-block;
     background-color: #FF0026;
     color: white;
-    padding: 5px 10px;
+    padding: 4px 8px;
     border-radius: 5px;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
 }
 
 .listing-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
     color: #333;
+    transition: all 0.3s ease;
 }
 
 .listing-description {
     color: #666;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
 }
 
 .listing-price {
     font-weight: bold;
     color: #FF0026;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.listing-card:hover .listing-price {
+    color: white;
 }
 
 /* Additional Content */
@@ -732,7 +809,7 @@ footer {
 /* Product Detail Modal */
 #product-detail-modal .modal-content {
     max-width: 800px;
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: auto;
 }
 
@@ -751,13 +828,15 @@ footer {
 .product-detail-image {
     flex: 1;
     min-width: 0;
+    cursor: pointer;
 }
 
 .product-detail-image img {
     width: 100%;
     max-height: 400px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
 .product-detail-info {
@@ -865,29 +944,65 @@ footer {
     margin-top: 5px;
 }
 
-/* Enhance listing cards to look better */
-.listing-card {
-    transition: transform 0.3s, box-shadow 0.3s;
+/* Full-size image modal */
+#image-fullsize-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    overflow: hidden;
+}
+
+#image-fullsize-modal img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+#image-fullsize-modal .close-fullsize {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
     cursor: pointer;
 }
 
-.listing-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+/* Mobile Responsive Adjustments for category and listing cards */
+@media (max-width: 1100px) {
+    .listings-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-/* Mobile Responsiveness */
+@media (max-width: 900px) {
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
-    #product-detail-modal .modal-content {
-        padding: 15px;
+    .listings-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
     
-    .product-detail-container {
-        flex-direction: column;
-    }
-    
-    .product-detail-image img {
-        max-height: 250px;
+    .listings-grid {
+        grid-template-columns: 1fr;
     }
 }
 
